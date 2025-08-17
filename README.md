@@ -2,14 +2,6 @@
 
 A full-stack web application built as a learning project to demonstrate modern web development skills. This project showcases my journey in mastering React, Flask, and web scraping technologies.
 
-## 🎯 Project Overview
-
-As a fresh graduate passionate about web development, I built this job listing application to:
-- **Learn full-stack development** with modern technologies
-- **Practice API design** and database management
-- **Master web scraping** and data processing
-- **Build responsive UIs** with professional styling
-- **Implement real-world features** like filtering, search, and pagination
 
 ## 🚀 Key Features Implemented
 
@@ -285,18 +277,14 @@ As a learning project, I welcome feedback and suggestions:
 4. Test thoroughly
 5. Submit a pull request
 
-## 📞 Contact
+##  Contact
 
 - **GitHub:** [@itsmahsank](https://github.com/itsmahsank)
-- **LinkedIn:** [Your LinkedIn]
-- **Email:** [Your Email]
+- **LinkedIn:** https://www.linkedin.com/in/itsahsank/ 
+- **Email:** itsmahsank@gmail.com
 
 ## 📝 License
 
-This project is for educational purposes and demonstrates my full-stack development skills.
+This project  demonstrates my full-stack development skills.
 
 ---
-
-**Built with passion and dedication to learning modern web development** 🚀
-
-*This project showcases my journey from a fresh graduate to a full-stack developer, demonstrating practical skills that are highly valued in the industry.*

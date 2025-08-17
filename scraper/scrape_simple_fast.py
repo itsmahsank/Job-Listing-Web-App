@@ -24,7 +24,7 @@ from models.job import Job
 # ----------------------------
 DATABASE_URL = os.getenv('DATABASE_URL')
 if not DATABASE_URL:
-    print("❌ No DATABASE_URL found in environment variables")
+    print(" No DATABASE_URL found in environment variables")
     sys.exit(1)
 
 print(f"🔗 Connecting to database: {DATABASE_URL[:50]}...")
@@ -80,7 +80,7 @@ def get_driver():
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
     driver = webdriver.Chrome(options=chrome_options)
-    return driver
+        return driver
 
 
 def scrape_jobs():
@@ -95,7 +95,7 @@ def scrape_jobs():
     max_pages = 10  # Limit  pages maximum
 
     while current_page <= max_pages:
-        print(f"📄 Scraping page {current_page}/{max_pages}")
+        print(f" Scraping page {current_page}/{max_pages}")
         
         # Look for job cards - they appear to be individual job listings
         # More specific selectors to avoid page headers and navigation
@@ -109,7 +109,7 @@ def scrape_jobs():
         )
         
         if not job_cards:
-            print("❌ No job elements found on this page.")
+            print(" No job elements found on this page.")
             # Try alternative selectors for job-specific content
             job_cards = driver.find_elements(By.CSS_SELECTOR, 
                 "div:has(img[src*='logo']):has(text), " +
@@ -118,42 +118,42 @@ def scrape_jobs():
             )
             
         if not job_cards:
-            print("❌ Still no job elements found. Trying to get page source...")
+            print(" Still no job elements found. Trying to get page source...")
             page_source = driver.page_source[:2000]
             print(f"Page source preview: {page_source}")
-            print("❌ No valid job elements found on this page. Moving to next page or stopping.")
+            print(" No valid job elements found on this page. Moving to next page or stopping.")
             # Try to move to next page instead of breaking
             try:
                 next_button = driver.find_element(By.XPATH, "//a[contains(text(),'Next') or contains(text(),'›') or contains(text(),'→')]")
                 if next_button:
-                    print("➡️ Clicking next page...")
+                    print(" Clicking next page...")
                     next_button.click()
                     time.sleep(3)
                     current_page += 1
                     continue
                 else:
-                    print("❌ No next page button found. Stopping.")
+                    print(" No next page button found. Stopping.")
                     break
             except NoSuchElementException:
                 # Try URL-based pagination
                 try:
                     next_url = base_url + f"?page={current_page + 1}"
-                    print(f"🔄 Trying direct URL navigation: {next_url}")
+                    print(f" Trying direct URL navigation: {next_url}")
                     driver.get(next_url)
                     time.sleep(3)
                     current_page += 1
-                    continue
+                continue
                 except Exception as e:
-                    print(f"❌ Could not navigate to next page: {e}")
+                    print(f" Could not navigate to next page: {e}")
                     break
 
-        print(f"🔎 Found {len(job_cards)} potential job elements on this page.")
+        print(f" Found {len(job_cards)} potential job elements on this page.")
 
         for card in job_cards:
             try:
                 # Skip if card is too small (likely not a job)
                 if len(card.text.strip()) < 50:
-                    continue
+                continue
                     
                 # Skip if card contains navigation or page elements
                 card_text_lower = card.text.lower()
@@ -172,7 +172,7 @@ def scrape_jobs():
                     'next',
                     'previous'
                 ]):
-                    continue
+                continue
 
                 # Job Title - look for headings
                 job_title = "Unknown Title"
@@ -185,7 +185,7 @@ def scrape_jobs():
                     for line in lines:
                         if len(line) > 5 and not any(x in line.lower() for x in ['logo', 'featured', 'apply', 'ago']):
                             job_title = line
-                            break
+                    break
 
                 # Company - look for company name near logo or in text
                 company = "Unknown Company"
@@ -205,7 +205,7 @@ def scrape_jobs():
                             if (line != job_title and len(line) > 2 and 
                                 not any(x in line.lower() for x in ['remote', 'posted', 'apply', 'ago', 'featured', '💰', '🇺🇸', '🇬🇧'])):
                                 company = line
-                                break
+                    break
 
                 # Skip if we don't have essential info
                 if job_title == "Unknown Title" or company == "Unknown Company":
@@ -216,14 +216,14 @@ def scrape_jobs():
                     len(job_title) > 150 or
                     job_title.count(' ') < 1 or
                     job_title.count(' ') > 12):
-                    print(f"⏭️ Skipping generic title: {job_title}")
+                    print(f" Skipping generic title: {job_title}")
                     continue
 
                 # Skip if company name is too generic
                 if (len(company) < 2 or 
                     len(company) > 80 or
                     company.lower() in ['logo', 'filters', 'filter', 'search', 'about', 'filters']):
-                    print(f"⏭️ Skipping generic company: {company}")
+                    print(f" Skipping generic company: {company}")
                     continue
 
                 # Skip if job title is actually a company name (common mistake)
@@ -233,18 +233,18 @@ def scrape_jobs():
                     'aig', 'wtw', 'scor', 'qbe', 'bupa', 'kpmg', 'isio', 'legal & general'
                 ]
                 if job_title.lower() in company_names:
-                    print(f"⏭️ Skipping company name as job title: {job_title}")
+                    print(f" Skipping company name as job title: {job_title}")
                     continue
 
                 # Skip if job title is a location (country/city)
                 if any(x in job_title for x in ['🇺🇸', '🇬🇧', '🇮🇳', '🇨🇦', '🇩🇪', '🇸🇬', '🇦🇺', 'USA', 'UK', 'Canada']):
-                    print(f"⏭️ Skipping location as job title: {job_title}")
-                    continue
+                    print(f" Skipping location as job title: {job_title}")
+                continue
 
                 # Skip if job title is a page element
                 page_elements = ['filters', 'filter', 'find handpicked actuarial jobs', 'search jobs']
                 if any(element in job_title.lower() for element in page_elements):
-                    print(f"⏭️ Skipping page element as job title: {job_title}")
+                    print(f" Skipping page element as job title: {job_title}")
                     continue
 
                 # Location - look for location indicators
@@ -262,11 +262,11 @@ def scrape_jobs():
                             if any(x in line for x in ['🇺🇸', '🇬🇧', '🇮🇳', '🇨🇦', '🇩🇪', '🇸🇬', '🇦🇺']) or \
                                any(x in line for x in ['NY', 'MA', 'IL', 'TX', 'CA', 'London', 'Manchester', 'Toronto']):
                                 location = clean_location_text(line)
-                                break
+                    break
                     except:
                         pass
 
-                # ----------------------------
+                
                 # Description
                 # ----------------------------
                 try:
@@ -350,7 +350,7 @@ def scrape_jobs():
 
                 if existing_job:
                     print(f"⏭️ Skipping duplicate: {job_title} at {company}")
-                    continue
+                continue
 
                 # ----------------------------
                 # Save Job
@@ -369,48 +369,48 @@ def scrape_jobs():
                 session.add(job)
                 session.commit()
                 jobs_added += 1
-                print(f"✅ Added: {job_title} at {company}")
+                print(f" Added: {job_title} at {company}")
 
             except Exception as e:
-                print(f"⚠️ Error parsing job card: {e}")
+                print(f" Error parsing job card: {e}")
                 continue
 
-        print(f"✅ Saved {jobs_added} jobs so far.")
+        print(f" Saved {jobs_added} jobs so far.")
 
         # Check if we've reached the page limit
         if current_page >= max_pages:
-            print(f"🎯 Reached maximum page limit ({max_pages}). Stopping scraper.")
+            print(f" Reached maximum page limit ({max_pages}). Stopping scraper.")
             break
 
         # Next page button - look for pagination
         try:
             next_button = driver.find_element(By.XPATH, "//a[contains(text(),'Next') or contains(text(),'›') or contains(text(),'→')]")
             if next_button:
-                print("➡️ Clicking next page...")
+                print(" Clicking next page...")
                 next_button.click()
                 time.sleep(3)
                 current_page += 1
             else:
-                print("❌ No next page button found. Stopping.")
-                break
+                print(" No next page button found. Stopping.")
+                        break
         except NoSuchElementException:
             # Try URL-based pagination
             try:
                 next_url = base_url + f"?page={current_page + 1}"
-                print(f"🔄 Trying direct URL navigation: {next_url}")
+                print(f" Trying direct URL navigation: {next_url}")
                 driver.get(next_url)
                 time.sleep(3)
                 current_page += 1
             except Exception as e:
-                print(f"❌ Could not navigate to next page: {e}")
+                print(f" Could not navigate to next page: {e}")
                 break
 
-    print(f"🎉 Scraping completed. Total jobs scraped: {jobs_added} from {current_page} pages.")
-    driver.quit()
+    print(f" Scraping completed. Total jobs scraped: {jobs_added} from {current_page} pages.")
+            driver.quit()
     session.close()
 
 
 if __name__ == "__main__":
-    print("🚀 Starting ActuaryList Job Scraper...")
+    print(" Starting ActuaryList Job Scraper...")
     scrape_jobs()
     print("✨ Scraping completed!")
