@@ -142,7 +142,6 @@ def scrape_jobs():
                     driver.get(next_url)
                     time.sleep(3)
                     current_page += 1
-                continue
                 except Exception as e:
                     print(f" Could not navigate to next page: {e}")
                     break
@@ -153,7 +152,7 @@ def scrape_jobs():
             try:
                 # Skip if card is too small (likely not a job)
                 if len(card.text.strip()) < 50:
-                continue
+                    continue
                     
                 # Skip if card contains navigation or page elements
                 card_text_lower = card.text.lower()
@@ -172,7 +171,7 @@ def scrape_jobs():
                     'next',
                     'previous'
                 ]):
-                continue
+                    continue
 
                 # Job Title - look for headings
                 job_title = "Unknown Title"
@@ -239,7 +238,7 @@ def scrape_jobs():
                 # Skip if job title is a location (country/city)
                 if any(x in job_title for x in ['🇺🇸', '🇬🇧', '🇮🇳', '🇨🇦', '🇩🇪', '🇸🇬', '🇦🇺', 'USA', 'UK', 'Canada']):
                     print(f" Skipping location as job title: {job_title}")
-                continue
+                    continue
 
                 # Skip if job title is a page element
                 page_elements = ['filters', 'filter', 'find handpicked actuarial jobs', 'search jobs']
@@ -262,7 +261,6 @@ def scrape_jobs():
                             if any(x in line for x in ['🇺🇸', '🇬🇧', '🇮🇳', '🇨🇦', '🇩🇪', '🇸🇬', '🇦🇺']) or \
                                any(x in line for x in ['NY', 'MA', 'IL', 'TX', 'CA', 'London', 'Manchester', 'Toronto']):
                                 location = clean_location_text(line)
-                    break
                     except:
                         pass
 
@@ -350,7 +348,7 @@ def scrape_jobs():
 
                 if existing_job:
                     print(f"⏭️ Skipping duplicate: {job_title} at {company}")
-                continue
+                    continue
 
                 # ----------------------------
                 # Save Job
@@ -392,7 +390,7 @@ def scrape_jobs():
                 current_page += 1
             else:
                 print(" No next page button found. Stopping.")
-                        break
+                break
         except NoSuchElementException:
             # Try URL-based pagination
             try:
@@ -406,7 +404,7 @@ def scrape_jobs():
                 break
 
     print(f" Scraping completed. Total jobs scraped: {jobs_added} from {current_page} pages.")
-            driver.quit()
+    driver.quit()
     session.close()
 
 
