@@ -10,10 +10,7 @@
   overflow: hidden;
 }
 
-.job-card:hover {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
-}
+
 
 /* Header styles */
 .job-card-header {
@@ -67,10 +64,7 @@
   border-color: #ddd;
 }
 
-.edit-btn:hover {
-  background-color: #f5f5f5;
-  color: #000;
-}
+
 
 .delete-btn {
   background-color: transparent;
@@ -78,10 +72,7 @@
   border-color: #ef9a9a;
 }
 
-.delete-btn:hover {
-  background-color: #ffebee;
-  color: #e53935;
-}
+
 
 /* Job subtitle section */
 .job-subtitle {
@@ -154,9 +145,7 @@
   border: 1px solid #eee;
 }
 
-.job-tag:hover {
-  background-color: #e5e7eb;
-}
+
 
 /* Job details */
 .job-details {
@@ -396,10 +385,7 @@
   color: #666;
 }
 
-.cancel-btn:hover {
-  background-color: #f5f5f5;
-  color: #333;
-}
+
 
 .confirm-btn {
   background-color: #d32f2f;
@@ -407,10 +393,7 @@
   border-color: #d32f2f;
 }
 
-.confirm-btn:hover {
-  background-color: #b71c1c;
-  border-color: #b71c1c;
-}
+
 
 /* Responsive design for modal */
 @media (max-width: 480px) {
